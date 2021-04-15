@@ -83,6 +83,7 @@ geometry_msgs/PoseStamped goal
 float32 tolerance
 ```
 * The path will be displayed on rviz. Yellow points represent Agent_1 path. Red points represent Agent_2 path,
+![alt text](https://github.com/maxt-yh/FIRSTNAME_LASTNAME_FULLTIME/blob/master/config/agent.png "Agent Map")
 
 
 ---
