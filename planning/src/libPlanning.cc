@@ -11,6 +11,7 @@ Planning::Planning() {
   costmap_resolution_ = 1;
   map_window_height_ = 11;
   map_window_width_ = 11;
+	path_occupancy_ = 0;
   
   Initialization();
 }
@@ -87,7 +88,8 @@ double Planning::CalculateAstarH(AstarPoint *point, AstarPoint *start, AstarPoin
 	if(!Astar_all_array_.empty()) {
 		for(int i = 0; i < Astar_all_array_.size(); i++) {
 			for(auto raw_point : Astar_all_array_[i]) {
-				if(point->x == raw_point.x && point->y == raw_point.y) 
+				if(point->x == raw_point.x && point->y == raw_point.y)
+				// if(Astar_costmap_array_[point->x][point->y] >= 50) 
 				return INFINITE;
 			}
 		}
@@ -197,8 +199,7 @@ sensor_msgs::PointCloud Planning::GetPath(geometry_msgs::Point32 start_array,geo
 	Astar_open_list_.clear();
 	Astar_close_list_.clear();
 
-  signed char path_occupancy = 50;
-  SetAstarCostmapPath(Astar_all_array_,path_occupancy);
+  SetAstarCostmapPath(Astar_all_array_,path_occupancy_);
 
   if(!array_candidate.empty()) ROS_INFO("Astar path was found !");
   else ROS_ERROR("Astar path could not be found !");
@@ -294,4 +295,16 @@ void Planning::AgentGroupPublish() {
 		temp_pointcloud.points.push_back(temp_point);
 	}
 	agent_group_pub.publish(temp_pointcloud);
+}
+
+void Planning::ClearCostmapOccupancy(signed char Occupancy) {
+	if(costmap_.data.empty()) return;
+	for(int i = 0; i < costmap_.data.size(); i++) {
+		if(costmap_.data[i] == Occupancy) {
+			costmap_.data[i] = 0;
+			int row_num = i % costmap_.info.height;
+			int col_num = costmap_.info.height - i / costmap_.info.height - 1;
+			Astar_costmap_array_[row_num][col_num] = 0;
+		}
+	}
 }

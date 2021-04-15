@@ -86,6 +86,7 @@ private:
 	geometry_msgs::Point32 agent_1_pose_;
 	geometry_msgs::Point32 agent_2_pose_;
 
+	signed char path_occupancy_;
 
 	/** Function **/
 	void Initialization();
@@ -106,6 +107,7 @@ private:
 	bool IsAstarVaildPoint(const AstarPoint *point);
 	nav_msgs::Path ConvertPointcloudToPath(sensor_msgs::PointCloud Input);
 	void AgentGroupPublish();
+	void ClearCostmapOccupancy(signed char Occupancy);
 
 	/** Service **/
   bool PathService(nav_msgs::GetPlan::Request &req, nav_msgs::GetPlan::Response &res) {
@@ -117,10 +119,14 @@ private:
 		goal_point.y = req.goal.pose.position.y;
 
 		if(req.goal.header.frame_id == "agent_1") {
+			path_occupancy_ = 50;
+			// ClearCostmapOccupancy(path_occupancy_);
 			path_pointcloud = GetPath(agent_1_pose_, goal_point);
 			agent_1_path_pub.publish(path_pointcloud);
 		}
 		else if(req.goal.header.frame_id == "agent_2") {
+			path_occupancy_ = 55; 
+			// ClearCostmapOccupancy(path_occupancy_);
 			path_pointcloud = GetPath(agent_2_pose_, goal_point);
 			agent_2_path_pub.publish(path_pointcloud);
 		}
