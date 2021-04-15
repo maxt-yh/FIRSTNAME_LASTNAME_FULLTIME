@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="planning" type="planner_node" name="planner_node"  output="screen"/> 
+  <node pkg="rviz" type="rviz" name="rviz_navi"  args="-d $(find config)/cfg/1.rviz" />
+
+  <include file="$(find config)/launch/agent_1.launch" />
+  <include file="$(find config)/launch/agent_2.launch" />
+</launch>

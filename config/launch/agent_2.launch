@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="agent" type="agent_node" name="agent_node_2"  output="screen" >
+    <param name="agent_id" type="string" value="agent_2" />
+    <param name="start_x" type="double" value="0.0" />
+    <param name="start_y" type="double" value="3.0" />
+    <param name="start_z" type="double" value="0.0" />
+  </node>
+  
+</launch>
